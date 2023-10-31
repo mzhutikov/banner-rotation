@@ -1,10 +1,9 @@
 package repository
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
-
-	"context"
 
 	_ "github.com/lib/pq" // Импорт драйвера PostgreSQL
 	"github.com/mzhutikov/banner-rotation/pkg/models"
@@ -91,26 +90,8 @@ func (d *Database) Close() {
 
 func NewRepo(db *sql.DB) *Repo {
 	return &Repo{
-		SlotRepository:      &SlotRepo{db: db},
-		BannerRepository:    &BannerRepo{db: db},
+		SlotRepository:        &SlotRepo{db: db},
+		BannerRepository:      &BannerRepo{db: db},
 		SocDemGroupRepository: &SocDemGroupRepo{db: db},
 	}
-}
-
-func (s *SlotRepo) CreateSlot(slot *models.Slot) error {
-	query := "INSERT INTO slots(id, description) VALUES($1, $2)"
-	_, err := s.db.Exec(query, slot.ID, slot.Description)
-	return err
-}
-
-func (s *BannerRepo) CreateBanner(banner *models.Banner) error {
-	query := "INSERT INTO banners(id, description) VALUES($1, $2)"
-	_, err := s.db.Exec(query, banner.ID, banner.Description)
-	return err
-}
-
-func (s *SocDemGroupRepo) CreateGroup(group *models.Group) error {
-	query := "INSERT INTO user_groups(id, description) VALUES($1, $2)"
-	_, err := s.db.Exec(query, group.ID, group.Description)
-	return err
 }
